@@ -1,0 +1,2 @@
+pymongo
+pbu>=1.0.0
