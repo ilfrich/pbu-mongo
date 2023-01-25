@@ -206,15 +206,6 @@ class AbstractMongoStore(ABC):
         return self.collection.delete_many(query)
 
     @staticmethod
-    def list_to_json(item_list: List[AbstractMongoDocument]):
-        """
-        Helper class serialising a list of MongoDocuments into a list of dictionaries that can easily be serialised.
-        :param item_list: a list of MongoDocument instances
-        :return: a list of dictionaries.
-        """
-        return list(map(lambda item: item.to_json(), item_list))
-
-    @staticmethod
     def object_id(string_id: str):
         """
         Creates a MongoDB ObjectId instance from a given string ID
