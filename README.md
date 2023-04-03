@@ -131,6 +131,8 @@ This is an abstract class and cannot be instantiated directly. Instead, define a
   but returns a `list` of all the documents and can consume quite a bit of compute and memory.
 - `create(document)` - creates a new document and returns the `_id` of the newly created BSON document as string. The
   `document` can be either `dict` or an instance of the `deserialised_class` provided in the `super().__init(..)` call.
+  - Since version 1.0.1 a new parameter is available `create(document, return_doc=True)` which will return the entire
+    document/object instead of just the `_id` of the newly created document. 
 - `query_one(query: dict)` - fetches a single document and deserialises it or returns `None` if no document can be found
 - `query(query: dict, sorting, paging)` - fetches multiple documents and deserialises them. `sorting` can be an
   attribute name (as provided in the BSON) or a dictionary with the sort order. `paging` is an instance of

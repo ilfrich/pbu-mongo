@@ -52,10 +52,11 @@ class AbstractMongoStore(ABC):
         self.object_class = deserialised_class
         self.data_model_version = data_model_version
 
-    def create(self, document: Union[dict, AbstractMongoDocument]) -> str:
+    def create(self, document: Union[dict, AbstractMongoDocument], return_doc = False) -> str:
         """
         Creates a new document in the current store/collection.
         :param document: the document to provide either as dictionary or MongoDocument sub-class instance.
+        :param return_doc: a boolean to indicate whether the full inserted object is returned or just its id
         :return: the id of the newly created document
         """
         if getattr(document, "to_json", None) is not None:
@@ -64,7 +65,10 @@ class AbstractMongoStore(ABC):
         if isinstance(document, dict):
             if "dataModelVersion" not in document and self.data_model_version is not None:
                 document["dataModelVersion"] = self.data_model_version
-            return str(self.collection.insert_one(document).inserted_id)
+            if "_id" in document:
+                del document["_id"]
+            insert_id = str(self.collection.insert_one(document).inserted_id)
+            return insert_id if return_doc is False else self.get(insert_id)
         raise ValueError("Provided document needs to be a dict or provide a to_json() method which returns a dict")
 
     def query(self, query: dict, sorting: Union[dict, str] = None, paging: PagingInformation = None) -> List[_QRY_RES]:
@@ -166,7 +170,7 @@ class AbstractMongoStore(ABC):
         """
         if "$set" in update and "_id" in update["$set"]:
             del update["$set"]["_id"]
-        return self.collection.update(query, update)
+        return self.collection.update_many(query, update)
 
     def update_full(self, document: _QRY_RES):
         if not isinstance(document, dict):

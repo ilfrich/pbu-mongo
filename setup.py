@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(name="pbumongo",
-      version="1.0.0",
+      version="1.0.1",
       description="Basic MongoDB wrapper for object-oriented collection handling",
       long_description=long_description,
       long_description_content_type="text/markdown",
