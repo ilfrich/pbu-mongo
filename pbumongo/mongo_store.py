@@ -29,8 +29,8 @@ class AbstractMongoStore(ABC):
     """
 
     @abstractmethod
-    def __init__(self, mongo_url: str, db_name: str, collection_name: str,
-                 deserialised_class: Type[AbstractMongoDocument], data_model_version=1):
+    def __init__(self, mongo_url: str = "mongodb://localhost:27017", db_name: str = None, collection_name: str = None,
+                 deserialised_class: Type[AbstractMongoDocument] = None, data_model_version=1):
         """
         Creates a new instance of this store providing credentials and behaviour parameters.
         :param mongo_url: the url to the mongo database (including credentials)
@@ -40,6 +40,8 @@ class AbstractMongoStore(ABC):
         MongoDB into objects that can be handled easier.
         :param data_model_version: the data model version of this store.
         """
+        if None in [db_name, collection_name]:
+            raise ValueError("Parameters db_name and collection_name are mandatory and have to be provided.")
         # e.g. mongodb://localhost:27017
         self.mongo_url = mongo_url
 

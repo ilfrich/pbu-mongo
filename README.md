@@ -8,6 +8,7 @@ Available on [PyPi](https://pypi.org/project/pbumongo/)
 2. [Usage](#usage)
 3. [Classes](#classes)
     1. [AbstractMongoStore](#abstractmongostore) - abstract class for handling MongoDB collection access
+       1. [MongoConnection](#mongoconnection) - a helper class to assist with creating multiple store instances 
     2. [AbstractMongoDocument](#abstractmongodocument) - abstract class for wrapping MongoDB BSON documents
 
 
@@ -92,6 +93,8 @@ class UserStore(AbstractMongoStore):
         user_id = self.create(user)
         return self.get(user_id)
 ```
+
+#### MongoConnection
 
 To use these classes in your application, you can use the MongoConnection helper or create the `UserStore` class
 instance directly. The `MongoConnection` helper is useful, when you have a lot of collections and don't want to repeat
