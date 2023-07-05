@@ -1,4 +1,5 @@
 import pymongo
+import warnings
 from typing import Union, List, Any, Type
 from bson import ObjectId
 from abc import ABC, abstractmethod
@@ -29,25 +30,30 @@ class AbstractMongoStore(ABC):
     """
 
     @abstractmethod
-    def __init__(self, mongo_url: str = "mongodb://localhost:27017", db_name: str = None, collection_name: str = None,
-                 deserialised_class: Type[AbstractMongoDocument] = None, data_model_version=1):
+    def __init__(self, mongo_url: str = "mongodb://localhost:27017", mongo_db: str = None, collection_name: str = None,
+                 deserialised_class: Type[AbstractMongoDocument] = None, data_model_version=1, db_name=None):
         """
         Creates a new instance of this store providing credentials and behaviour parameters.
         :param mongo_url: the url to the mongo database (including credentials)
-        :param db_name: the database name on the mongo database server
+        :param mongo_db: the database name on the mongo database server
         :param collection_name: the collection name within the database selected
         :param deserialised_class: a sub-class of AbstractMongoDocument, which can be used to de-serialise documents in
         MongoDB into objects that can be handled easier.
+        :param db_name: DEPRECATED: compatibility constructor argument for old code using the named parameter
         :param data_model_version: the data model version of this store.
         """
-        if None in [db_name, collection_name]:
+        if None in [mongo_db, collection_name]:
             raise ValueError("Parameters db_name and collection_name are mandatory and have to be provided.")
+        if db_name is not None:
+            warnings.warn("Parameter db_name is deprecated and will be removed in future versions. Please use "
+                          "mongo_db instead.")
+            mongo_db = db_name
         # e.g. mongodb://localhost:27017
         self.mongo_url = mongo_url
 
         # connect
         client = pymongo.MongoClient(self.mongo_url)
-        self.db = client[db_name]
+        self.db = client[mongo_db]
         self.collection = self.db[collection_name]
 
         self.logger = Logger(self.__class__.__name__)
