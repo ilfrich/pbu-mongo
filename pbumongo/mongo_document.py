@@ -43,13 +43,3 @@ class AbstractMongoDocument(JsonDocument, ABC):
             result["dataModelVersion"] = self.data_model_version
 
         return result
-
-    @staticmethod
-    @abstractmethod
-    def from_json(json: dict):
-        """
-        Receives a dictionary or JSON object and returns an instance of this MongoDocument sub-class.
-        :param json: a dictionary or JSON object instance
-        :return: an instance of a sub-class of MongoDocument
-        """
-        pass

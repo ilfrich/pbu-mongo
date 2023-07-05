@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(name="pbumongo",
-      version="1.0.2",
+      version="1.1.0",
       description="Basic MongoDB wrapper for object-oriented collection handling",
       long_description=long_description,
       long_description_content_type="text/markdown",
@@ -17,7 +17,7 @@ setup(name="pbumongo",
       ],
       install_requires=[
           "pymongo",
-          "pbu>=1.0.0"
+          "pbu>=1.1.0"
       ],
       tests_require=[
           "pytest",
