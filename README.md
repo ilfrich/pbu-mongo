@@ -10,6 +10,7 @@ Available on [PyPi](https://pypi.org/project/pbumongo/)
     1. [AbstractMongoStore](#abstractmongostore) - abstract class for handling MongoDB collection access
        1. [MongoConnection](#mongoconnection) - a helper class to assist with creating multiple store instances 
     2. [AbstractMongoDocument](#abstractmongodocument) - abstract class for wrapping MongoDB BSON documents
+    3. [ProgressUpdater](#progressupdater) - a collection of classes to help with updating job progress 
 
 
 ## Installation
@@ -112,7 +113,7 @@ user = user_store.login(username="admin", password="mypassword")
 
 ## Classes
 
-### AbstractMongoStore
+### `AbstractMongoStore`
 
 This is an abstract class and cannot be instantiated directly. Instead, define a class that extends this class.
 
@@ -157,7 +158,7 @@ This is an abstract class and cannot be instantiated directly. Instead, define a
 - `AbstractMongoStore.unset_update(keys)` - creates an `$unset` update statement with the attributes listed as `keys`.
   Similarly to `.set_update`, you can provide a single key without a list for ease of use.
   
-### AbstractMongoDocument
+### `AbstractMongoDocument`
 
 This is an abstract class and cannot be instantiated directly. Instead, define a class that extends this class.
 
@@ -173,3 +174,22 @@ not provide the `_id` as the store class handles that.
 
 For methods and static methods please see the documentation of `JsonDocument` from `pbu`. `AbstractMongoDocument` 
 extends that class.
+
+
+### `ProgressUpdater`
+
+The `ProgressUpdaer` class is part of a set of classes that assist with keeping track of job progress. The other classes
+are:
+
+- `ProgressObject`: a database object with fields for a status (see `pbu` > `JobStatus`), start and end timestamp, 
+ total count, processed count, a list of errors and a main error.
+- `ProgressObjectStore`: an abstract class that provides store methods to update status, progress and errors of a 
+ `ProgressObject`
+- `ProgressError`: a JSON document containing an error message as well as a dictionary for data related to the error. 
+ These objects will be appeneded to a `ProgressObject`'s `errors` list.
+- `ProgressUpdater`: an object to pass into a processor, which holds references to the progress store and progress 
+ object and provides methods for updating progress and handling errors.
+
+Both, `ProgressObject` and `ProgressObjectStore` are abstract classes and should be extended with remaining attributes 
+of a process / job definition (like a name/label, extra configuration, etc.). `ProgressObject` is an 
+`AbstractMongoDocument` and `ProgressUpdateStore` is an `AbstractMongoStore`.

@@ -1,3 +1,4 @@
 from pbumongo.mongo_store import AbstractMongoStore, PagingInformation
 from pbumongo.mongo_document import AbstractMongoDocument
 from pbumongo.mongo_connection import MongoConnection
+from pbumongo.job_progress import ProgressObject, ProgressObjectStore, ProgressError, ProgressUpdater
